@@ -25,4 +25,14 @@ module.exports = {
       },
     },
   ],
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        moduleDirectory: ['node_modules', 'src/'],
+      },
+    },
+  },
 };
+
+// eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies
