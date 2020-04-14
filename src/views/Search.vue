@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <Claim/>
-    <SearchInput/>
+    <SearchInput v-model="searchValue" @input="handleInput"/>
 
     <!-- <ul>
       <li v-for='item in result' :key='item.data[0].nasa_id'>
@@ -44,11 +44,19 @@ export default {
 
 <style lang="scss" scoped>
   .wrapper{
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     margin: 0;
     padding: 30px;
     width: 100%;
+    height: 100vh;
+    // background-image: url('../images/back.jpg');
+    // background-repeat: no-repeat;
+    // background-size: cover;
+    // background-position: 20% 0%;
+    color: white;
   }
 </style>
