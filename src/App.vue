@@ -8,16 +8,21 @@
         <heroImage v-if="step === 0"/>
       </transition>
       <Claim v-if="step === 0"/>
-      <SearchInput v-model="searchValue" @input="handleInput" :dark='step === 1'/>
-    <!-- <ul>
-      <li v-for='item in result' :key='item.data[0].nasa_id'>
-        <p>{{ item.data[0].description }}</p>
-      </li>
-    </ul> -->
+      <SearchInput
+      v-model="searchValue"
+      @input="handleInput"
+      :dark='step === 1'
+      />
     <div class="results" v-if="result && !loading && step === 1">
-      <Item v-for="item in result" :item="item" :key="item.data[0].nasa_id"/>
+      <Item
+      v-for="item in result"
+      :item="item"
+      :key="item.data[0].nasa_id"
+      @click.native="handleModalOpen(item)"/>
     </div>
   </div>
+  <div class="loader" v-if="step === 1 && loading" />
+  <Modal v-if="modalOpen" :item="modalItem" @closeModal="modalOpen = false"/>
   </div>
 </template>
 
@@ -86,6 +91,39 @@
       grid-template-columns: 1fr 1fr 1fr;
     }
   }
+  .loader {
+  margin-top: 100px;
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+  @media (min-width: 768px) {
+    width: 90px;
+    height: 90px;
+  }
+}
+.loader:after {
+  content: " ";
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #1e3d4a;
+  border-color: #1e3d4a transparent #1e3d4a transparent;
+  animation: loading 1.2s linear infinite;
+  @media (min-width: 768px) {
+    width: 90px;
+    height: 90px;
+  }
+}
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 </style>
 
@@ -96,13 +134,14 @@ import Claim from '@/components/Claim.vue';
 import SearchInput from '@/components/searchInput.vue';
 import HeroImage from '@/components/heroImage.vue';
 import Item from '@/components/Item.vue';
+import Modal from '@/components/Modal.vue';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies
 
 const API = 'https://images-api.nasa.gov';
 export default {
   name: 'Search',
   components: {
-    Claim, SearchInput, HeroImage, Item,
+    Claim, SearchInput, HeroImage, Item, Modal,
   },
   data() {
     return {
@@ -110,9 +149,15 @@ export default {
       step: 0,
       searchValue: '',
       result: [],
+      modalOpen: false,
+      modalItem: null,
     };
   },
   methods: {
+    handleModalOpen(item) {
+      this.modalOpen = true;
+      this.modalItem = item;
+    },
     handleInput: debounce(function () {
       this.loading = true;
       console.log(this.searchValue);

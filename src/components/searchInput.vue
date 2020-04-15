@@ -49,6 +49,7 @@ export default {
     color: white;
     text-align: center;
     font-weight: 300;
+    outline: none;
     @media(min-width: 1024px){
       font-weight: 400;
     }
